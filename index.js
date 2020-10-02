@@ -56,6 +56,13 @@ server.get('/api/devices', (request, response) => {
     response.status(200).jsonp({ results: data });
 });
 
+server.get('/api/devices/:id', (request, response) => {
+    const devices = require('./devices_sims').devices;
+    console.log(request);
+    const data = _.find(devices, { url_id: request.params })
+    response.status(200).jsonp({ results: data });
+});
+
 server.get('/api/sims', (request, response) => {
     const sims = require('./devices_sims.js').carrierSIMs;
     response.status(200).jsonp({ results: sims });
