@@ -59,7 +59,7 @@ server.get('/api/devices', (request, response) => {
 server.get('/api/devices/:id', (request, response) => {
     const devices = require('./devices_sims').devices;
     console.log(request);
-    const data = _.find(devices, { url_id: request.params })
+    const data = _.find(devices, { url_id: request.params });
     response.status(200).jsonp({ results: data });
 });
 
@@ -80,4 +80,16 @@ server.get('/api/pools', (request, response) => {
         });
     });
     response.status(200).jsonp({ results: pools });
+});
+
+server.get('/api/pools/:id', (request, response) => {
+    const pools = require('./pools.js').pools;
+    const data = _.find(pools, { url_id: request.params });
+    data['sims'] = [];
+    _.forEach(sims, sim => {
+        if (parseInt(pool.id) === parseInt(sim.pool_url_id)) {
+            data['sims'].push(sim);
+        }
+    });
+    response.status(200).jsonp({ results: data });
 });
