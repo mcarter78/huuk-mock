@@ -26,7 +26,7 @@ server.get('/api/customer_carriers', (request, response) => {
                 customerCarrier['pools'].push(pool);
                 pool['sims'] = [];
                 _.forEach(sims, sim => {
-                    if (parseInt(pool.id) === parseInt(sim.pool_id)) {
+                    if (parseInt(pool.id) === parseInt(sim.pool_url_id)) {
                         pool['sims'].push(sim);
                     }
                 });
@@ -67,7 +67,7 @@ server.get('/api/pools', (request, response) => {
     _.forEach(pools, pool => {
         pool['sims'] = [];
         _.forEach(sims, sim => {
-            if (parseInt(pool.id) === parseInt(sim.pool_id)) {
+            if (parseInt(pool.id) === parseInt(sim.pool_url_id)) {
                 pool['sims'].push(sim);
             }
         });
