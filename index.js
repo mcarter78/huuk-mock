@@ -42,6 +42,21 @@ server.get('/api/customer_carriers', (request, response) => {
     response.status(200).jsonp({ results: customerCarriers });
 });
 
+server.post('/api/customer_carriers', (request, response) => {
+    const newCustomerCarrier = {
+        "id": "99",
+        "carrier_id": request.body.carrier_id,
+        "createdAt": new Date(),
+        "name": request.body.name,
+        "url_id": "99",
+        "settings": request.body.settings,
+        "last_api_success": "2020-02-05T19:52:22.912Z",
+        "last_api_failure": "2020-06-03T13:55:06.661Z",
+        "active": true
+    }
+    response.status(200).jsonp({ results: newCustomerCarrier });
+});
+
 server.get('/api/devices', (request, response) => {
     const devices = require('./devices_sims').devices;
     const sims = require('./devices_sims.js').carrierSIMs;
@@ -80,6 +95,25 @@ server.get('/api/pools', (request, response) => {
         });
     });
     response.status(200).jsonp({ results: pools });
+});
+
+server.post('/api/pools', (request, response) => {
+    const customerCarriers = require('./carriers.js').customerCarriers;
+    const newPool = {
+        "id": "99",
+        "carrier_id": request.body.carrier_id,
+        "createdAt": new Date(),
+        "name": request.body.name,
+        "included_data_usage": request.body.included_data_usage,
+        "url_id": "99",
+        "per_subscriber_charge": request.body.per_subscriber_charge,
+        "account_charge": 85483,
+        "usage_limit": 73578,
+        "end_cycle_date": request.body.end_cycle_date,
+        "carrier_name": _.find(customerCarriers, { id: request.body.carrier_id }).name,
+        "shared": false
+    }
+    response.status(200).jsonp({ results: newPool });
 });
 
 server.get('/api/pools/:id', (request, response) => {

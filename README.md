@@ -1,3 +1,3 @@
-`npm start` to run application
+`npm install` then `npm start` to run application
 
-data at `localhost:8900`
+API at `http://localhost:8900`
