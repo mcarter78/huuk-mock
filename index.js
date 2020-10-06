@@ -2,6 +2,7 @@ const jsonServer = require('json-server');
 const server = jsonServer.create();
 const middlewares = jsonServer.defaults({ noCors: true });
 const _ = require('lodash');
+const { customerCarriers } = require('./carriers.js');
 
 server.use(jsonServer.bodyParser);
 server.use(middlewares);
@@ -52,9 +53,26 @@ server.post('/api/customer_carriers', (request, response) => {
         "settings": request.body.settings,
         "last_api_success": "2020-02-05T19:52:22.912Z",
         "last_api_failure": "2020-06-03T13:55:06.661Z",
-        "active": true
+        "active": true,
+        "pools": [],
+        "sims": []
     }
     response.status(200).jsonp({ results: newCustomerCarrier });
+});
+
+server.put('/api/customer_carriers/:id', (request, response) => {
+    const customerCarriers = require('./carriers.js').customerCarriers;
+    const ccToEdit = _.find(customerCarriers, { id: request.params.id });
+    _.forEach(request.body, (v, k) => {
+        ccToEdit[k] = v;
+    });
+    response.status(200).jsonp({ results: ccToEdit });
+});
+
+server.delete('/api/customer_carriers/:id', (request, response) => {
+    const customerCarriers = require('./carriers.js').customerCarriers;
+    const ccToDelete = _.find(customerCarriers, { id: request.params.id });
+    response.status(200).jsonp({ results: ccToDelete });
 });
 
 server.get('/api/devices', (request, response) => {
@@ -81,6 +99,15 @@ server.get('/api/devices/:id', (request, response) => {
 server.get('/api/sims', (request, response) => {
     const sims = require('./devices_sims.js').carrierSIMs;
     response.status(200).jsonp({ results: sims });
+});
+
+server.put('/api/sims/:id', (request, response) => {
+    const sims = require('./devices_sims.js').carrierSIMs;
+    const updatedSim = _find(sims, { url_id: request.params.id });
+    _.forEach(request.body, (v, k) => {
+        updatedSim[k] = v;
+    });
+    response.status(200).jsonp({ results: updatedSim });
 });
 
 server.get('/api/pools', (request, response) => {
@@ -111,7 +138,8 @@ server.post('/api/pools', (request, response) => {
         "usage_limit": 73578,
         "end_cycle_date": request.body.end_cycle_date,
         "carrier_name": _.find(customerCarriers, { id: request.body.carrier_id }).name,
-        "shared": false
+        "shared": false,
+        "sims": []
     }
     response.status(200).jsonp({ results: newPool });
 });
