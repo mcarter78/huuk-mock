@@ -155,3 +155,18 @@ server.get('/api/pools/:id', (request, response) => {
     });
     response.status(200).jsonp({ results: data });
 });
+
+server.put('/api/pools/:id', (request, response) => {
+    const pools = require('./pools.js').pools;
+    const updatedPool = _find(pools, { url_id: request.params.id });
+    _.forEach(request.body, (v, k) => {
+        updatedPool[k] = v;
+    });
+    response.status(200).jsonp({ results: updatedPool });
+});
+
+server.delete('/api/pools/:id', (request, response) => {
+    const pools = require('./pools.js').pools;
+    const poolToDelete = _.find(pools, { id: request.params.id });
+    response.status(200).jsonp({ results: poolToDelete });
+});
