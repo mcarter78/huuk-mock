@@ -103,7 +103,7 @@ server.get('/api/sims', (request, response) => {
 
 server.put('/api/sims/:id', (request, response) => {
     const sims = require('./devices_sims.js').carrierSIMs;
-    const updatedSim = _find(sims, { url_id: request.params.id });
+    const updatedSim = _.find(sims, { url_id: request.params.id });
     _.forEach(request.body, (v, k) => {
         updatedSim[k] = v;
     });
