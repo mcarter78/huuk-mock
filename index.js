@@ -92,7 +92,7 @@ server.get('/api/devices', (request, response) => {
 server.get('/api/devices/:id', (request, response) => {
     const devices = require('./devices_sims').devices;
     console.log(request);
-    const data = _.find(devices, { url_id: request.params });
+    const data = _.find(devices, { url_id: request.params.id });
     response.status(200).jsonp({ results: data });
 });
 
@@ -103,10 +103,11 @@ server.get('/api/sims', (request, response) => {
 
 server.put('/api/sims/:id', (request, response) => {
     const sims = require('./devices_sims.js').carrierSIMs;
-    const updatedSim = _.find(sims, { url_id: request.params.id });
-    _.forEach(request.body, (v, k) => {
+    const updatedSim = {..._.find(sims, { url_id: request.params.id })};
+    _.forEach(request.body, (v, k) => { 
         updatedSim[k] = v;
     });
+    console.log(request);
     response.status(200).jsonp({ results: updatedSim });
 });
 
@@ -146,7 +147,7 @@ server.post('/api/pools', (request, response) => {
 
 server.get('/api/pools/:id', (request, response) => {
     const pools = require('./pools.js').pools;
-    const data = _.find(pools, { url_id: request.params });
+    const data = _.find(pools, { url_id: request.params.id });
     data['sims'] = [];
     _.forEach(sims, sim => {
         if (parseInt(pool.id) === parseInt(sim.pool_url_id)) {
